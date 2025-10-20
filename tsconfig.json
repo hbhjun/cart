@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2020",                     // 编译目标
+    "module": "ESNext",                     // 模块系统
+    "lib": ["DOM", "ES2020"],               // 支持 DOM API
+    "jsx": "react-jsx",                     // React 17+ JSX 转译
+    "moduleResolution": "Node",
+    "allowJs": true,                        // 允许 JS 文件
+    "checkJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,                         // 开启严格模式
+    "skipLibCheck": true,                   // 跳过库类型检查
+    "noEmit": true,                          // 不生成输出文件
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": ".",                          // 基础路径
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["jest", "react-native", "react", "react-dom"] // 测试和 RN 类型
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js",
+    "jest.config.js"
+  ],
+  "include": ["src", "__tests__"]
+}

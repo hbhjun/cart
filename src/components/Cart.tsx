@@ -32,7 +32,7 @@ const Cart = () => {
                 >
                     <View>
                         <Text>{item.name}</Text>
-                        <Text>价格: ${item.price}</Text>
+                        <Text>价格: ¥{item.price}</Text>
                         <Text>数量: {item.quantity}</Text>
                     </View>
                     <View style={{ flexDirection: "row", gap: 6 }}>
@@ -48,7 +48,7 @@ const Cart = () => {
                     {item.name} × {item.quantity}
                 </Text>
             ))}
-            <Text>总价: ${total}</Text>
+            <Text>总价: ¥{total}</Text>
 
             <Button title="清空购物车" color="red" onPress={clear} />
         </View>

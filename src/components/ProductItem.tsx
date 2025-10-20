@@ -24,7 +24,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
             <Text>价格: ¥{product.price}</Text>
             <Text>库存: {remainingStock >= 0 ? remainingStock : 0}</Text>
             <Text>描述: {product.description}</Text>
-            <Button title="添加到购物车" onPress={handleAddToCart} />
+            <Button title="添加到购物车" testID={'abc'} onPress={handleAddToCart} />
         </View>
     );
 };

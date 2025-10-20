@@ -1,21 +1,25 @@
-import React from "react";
-import { render, fireEvent } from "@testing-library/react-native";
-import { CartProvider } from "@/context/CartContext";
-import ProductList from "@/components/ProductList";
-import Cart from "@/components/Cart";
-import { products } from "@/data/products";
+import * as React from 'react';
+import { CartProvider } from "./src/context/CartContext";
+import ProductList from "./src/components/ProductList";
+import Cart from "./src/components/Cart";
+import { products } from "./src/data/products";
+import { fireEvent,  render } from "@testing-library/react-native";
+import {getByTestId} from "@testing-library/react";
+
 
 describe("Cart Component", () => {
     test("添加商品到购物车", () => {
-        const { getByText } = render(
+        const screen = render(
             <CartProvider>
                 <ProductList />
                 <Cart />
             </CartProvider>
         );
 
+
+
         // 点击加入购物车
-        fireEvent.press(getByText("添加到购物车"));
+        fireEvent.press(screen.getByTestId("abc"));
 
         // 购物车中应该显示商品
         expect(getByText(products[0].name)).toBeTruthy();

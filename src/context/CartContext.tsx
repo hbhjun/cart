@@ -5,7 +5,7 @@ export interface CartItem extends Product {
     quantity: number;
 }
 
-interface CartContextType {
+export interface CartContextType {
     cart: CartItem[];
     addToCart: (product: Product) => void;
     increase: (id: number) => void;
