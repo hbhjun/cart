@@ -55,6 +55,8 @@ export const Carousel: React.FC = () => {
     /** 当前“逻辑索引”（包含首尾哨兵），用于计算下一列以及瞬移位置 */
     const indexRef = useRef(1);
 
+    const [currentIndex, setCurrentIndex] = useState(1);
+
     /** 拖拽开始时的 contentOffset.x，用于判定拖动方向与距离 */
     const dragStartOffsetRef = useRef(0);
 
@@ -96,7 +98,11 @@ export const Carousel: React.FC = () => {
      */
     const loopData = useMemo(() => {
         if (!data.length) return [];
-        return [data[data.length - 1], ...data, data[0]];
+        const groups = [];
+        for (let i = 0; i < data.length; i = i + 2) {
+            groups.push(data.slice(i, i + 2));
+        }
+        return [groups[groups.length - 1], ...groups, groups[0]];
     }, []);
 
     /** 真实可见列数（不包含哨兵） */
@@ -168,7 +174,8 @@ export const Carousel: React.FC = () => {
 
             if (targetIndex <= 0) {
                 const resetIndex = realCount;
-                indexRef.current = resetIndex;
+                setCurrentIndex(resetIndex);
+                // indexRef.current = resetIndex;
                 setIndex(resetIndex);
                 requestAnimationFrame(() => scrollToIndex(resetIndex, false));
                 return;
@@ -176,13 +183,14 @@ export const Carousel: React.FC = () => {
 
             if (targetIndex >= totalCount - 1) {
                 const resetIndex = 1;
-                indexRef.current = resetIndex;
+                setCurrentIndex(resetIndex);
+                // indexRef.current = resetIndex;
                 setIndex(resetIndex);
                 requestAnimationFrame(() => scrollToIndex(resetIndex, false));
                 return;
             }
-
-            indexRef.current = targetIndex;
+            setCurrentIndex(targetIndex);
+            // indexRef.current = targetIndex;
             setIndex(targetIndex);
         },
         [itemWidth, realCount, scrollToIndex, totalCount],
@@ -220,7 +228,8 @@ export const Carousel: React.FC = () => {
         if (!itemWidth || totalCount <= 1) return;
 
         autoTimerRef.current = setTimeout(() => {
-            const nextIndex = indexRef.current + 1;
+            const nextIndex = currentIndex + 1;
+            // const nextIndex = indexRef.current + 1;
             scrollToIndex(nextIndex, true);
             scheduleAdjust(nextIndex);
             startAutoScroll();
@@ -247,7 +256,8 @@ export const Carousel: React.FC = () => {
     useEffect(() => {
         if (!itemWidth || totalCount <= 1) return;
 
-        requestAnimationFrame(() => scrollToIndex(indexRef.current, false));
+        requestAnimationFrame(() => scrollToIndex(currentIndex, false));
+        // requestAnimationFrame(() => scrollToIndex(indexRef.current, false));
         startAutoScroll();
     }, [itemWidth, scrollToIndex, startAutoScroll, totalCount]);
 
@@ -272,7 +282,8 @@ export const Carousel: React.FC = () => {
      */
     const endPointer = (velocityX = 0) => {
         const endOffset = currentOffsetRef.current;
-        let target = indexRef.current;
+        let target = currentIndex;
+        // let target = indexRef.current;
 
         didSnapRef.current = false;
         isPointerActiveRef.current = false;
@@ -283,13 +294,17 @@ export const Carousel: React.FC = () => {
             const deltaRatio = deltaPx / itemWidth;
 
             if (velocityX > 0.05) {
-                target = indexRef.current + 1;
+                target = currentIndex + 1;
+                // target = indexRef.current + 1;
             } else if (velocityX < -0.05) {
-                target = indexRef.current - 1;
+                target = currentIndex- 1;
+                // target = indexRef.current - 1;
             } else if (deltaRatio > 0.02) {
-                target = indexRef.current + 1;
+                target = currentIndex + 1;
+                // target = indexRef.current + 1;
             } else if (deltaRatio < -0.02) {
-                target = indexRef.current - 1;
+                target = currentIndex - 1;
+                // target = indexRef.current - 1;
             } else {
                 target = Math.round(endOffset / itemWidth);
             }
@@ -325,13 +340,15 @@ export const Carousel: React.FC = () => {
 
         if (deltaRatio > 0.02) {
             console.log('huangbaba endPointer 0')
-            const target = indexRef.current + 1;
+            const target = currentIndex + 1;
+            // const target = indexRef.current + 1;
             didSnapRef.current = true;
             scrollToIndex(target, true);
             scheduleAdjust(target);
         } else if (deltaRatio < -0.02) {
             console.log('huangbaba endPointer 1')
-            const target = indexRef.current - 1;
+            const target = currentIndex - 1;
+            // const target = indexRef.current - 1;
             didSnapRef.current = true;
             scrollToIndex(target, true);
             scheduleAdjust(target);
@@ -383,16 +400,20 @@ export const Carousel: React.FC = () => {
                 onMomentumScrollEnd={handleMomentumEnd}
                 contentContainerStyle={styles.scrollContent}
             >
-                {loopData.map((item, idx) => (
-                    <View
-                        key={`${item.id}-${idx}`}
-                        style={[styles.item, {width: itemWidth || undefined}]}
-                    >
-                        <Image
-                            source={{uri: item.uri}}
-                            style={styles.image}
-                            resizeMode="cover"
-                        />
+                {loopData.map((group, idx) => (
+                    <View key={idx} style={{display: 'flex', flexDirection: 'row'}}>
+                        {group.map((item) => (
+                            <View
+                                key={item.id}
+                                style={[styles.item, {width: itemWidth || undefined}]}
+                            >
+                                <Image
+                                    source={{uri: item.uri}}
+                                    style={styles.image}
+                                    resizeMode="cover"
+                                />
+                            </View>
+                        ))}
                     </View>
                 ))}
             </ScrollView>
