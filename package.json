@@ -15,8 +15,9 @@
     "prettier": "^3.6.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-native": "^0.82.0",
+    "react-native": "0.72.5",
     "react-native-web": "^0.21.2",
+    "remax": "^2.15.14",
     "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
